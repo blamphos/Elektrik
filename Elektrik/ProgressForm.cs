@@ -110,6 +110,15 @@ namespace Elektrik
 	        labelStatus.Text = CancellingText;	
 		}
 		
+	    public void SetProgress(string status)
+	    {
+	        if (status != _lastStatus && !_worker.CancellationPending)
+	        {
+	            _lastStatus = status;
+	            _worker.ReportProgress(progressBar.Minimum - 1, status);
+	        }
+	    }
+    
 	    public void SetProgress(int percent)
 		{
 	       	if (percent != _lastPercent)

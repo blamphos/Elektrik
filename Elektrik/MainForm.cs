@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 using System.Linq;
@@ -21,49 +22,66 @@ namespace Elektrik
 	/// </summary>
 	public partial class MainForm : Form
 	{	
-		string _csvFileName;
+		readonly List<string> Months = new List<string> { "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu" };		
+
 		RecordCollection _data;
-		readonly List<string> Months = new List<string> { "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu" };
-		
+		ProgressForm _progressForm = new ProgressForm();
+			
 		public MainForm()
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-						
-			_csvFileName = Directory.GetFiles(Application.StartupPath, "*.csv").FirstOrDefault();
-			if (string.IsNullOrEmpty(_csvFileName))
-		    {
-				MessageBox.Show("CSV-file not found from startup path!");
-				return;
-		    }
-			
-			Text += " - " + Path.GetFileNameWithoutExtension(_csvFileName) + " (Riekonmarjatie 18 A 5)";
-			
-			_data = new RecordCollection();
-			ReadCsvFile();
-			InitGui();
-								
-			foreach (var year in _data.Years)
-			{
-				var yearLabel = year.ToString();
-				
-				// Total per year			
-				chart1.Series[0].Points.AddXY(yearLabel, _data.YearTotalKwh(year));
+					
+			_data = new RecordCollection();			
 
-				// Total per month	
-				var series = new Series(yearLabel);				
-				series.ChartType = SeriesChartType.Column;						
-				//series.IsValueShownAsLabel = true;
-				chart2.Series.Add(series);
-				
-				for (var i = 1; i <= 12; i++)
-				{
-					series.Points.AddXY(Months[i - 1], _data.MonthlyTotalKwh(year, i));
-				}
-			}	
 		}
+		
+		static void _progressForm_DoWork(ProgressForm sender, DoWorkEventArgs e)
+		{
+		    var myArgument = e.Argument as RecordCollection;
+		 
+			try 
+			{
+				var lines = File.ReadAllLines(myArgument.CsvFileName);
+								
+				var i = 0;
+				var header = false;
+				foreach(var line in lines)
+				{
+					if (!header)
+					{
+						header = true;
+						continue;
+					}
+					
+					var arr = line.Split(';');
+					var dt = DateTime.Parse(arr[0] + " " + arr[1]);
+					var kwh = Convert.ToDouble(arr[2]);
+					var temp = Convert.ToDouble(arr[3]);
+					
+					myArgument.Items.Add(new Record(dt, kwh, temp));
+					i++;
+					
+			        if (sender.CancellationPending)
+			        {
+			            e.Cancel = true;
+			            return;
+			        }	
+			        
+			        if (i % 50 == 0)
+			        {
+			        	sender.SetProgress(i, "Step " + i + " / " + lines.Count());
+			        	//System.Threading.Thread.Sleep(1);
+			        }						
+				}
+			} 
+			catch (Exception ex)
+			{
+				MessageBox.Show("ReadCsvFile", ex.Message);
+			}			
+		}		
 		
 		void InitGui()
 		{
@@ -85,21 +103,15 @@ namespace Elektrik
 			chart3.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
 			chart3.ChartAreas[0].AxisY.Title = "kWh";
 			chart3.Titles.Add(new Title("Päiväkulutus"));
-			
-			// Comboboxes
-			comboBoxMonth.SelectedIndexChanged -= ComboBoxMonthSelectedIndexChanged;
-			comboBoxMonth.Items.AddRange(Months.ToArray());
-			comboBoxMonth.SelectedIndex = DateTime.Now.Month - 1;
-			comboBoxMonth.SelectedIndexChanged += ComboBoxMonthSelectedIndexChanged;
 
-			UpdateDayChart(DateTime.Now.Month - 1);
+			UpdateDayChart(DateTime.Now.Month);
 		}
 		
-		void ReadCsvFile()
+		/*void ReadCsvFile(string csvFileName)
 		{
 			try 
 			{
-				using (var reader = new StreamReader(_csvFileName))
+				using (var reader = new StreamReader(csvFileName))
 				{
 					string line;
 					var header = false;
@@ -124,11 +136,12 @@ namespace Elektrik
 			{
 				MessageBox.Show("ReadCsvFile", e.Message);
 			}
-		}
+		}*/
 
 		void UpdateDayChart(int month)
 		{		
 			chart3.Series.Clear();			
+			chart3.Titles[0].Text = "Päiväkulutus / " + Months[month - 1] + "kuu";
 			
 			foreach (var year in _data.Years)
 			{
@@ -166,12 +179,64 @@ namespace Elektrik
 			    var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
 			    for (var i = 0; i < Months.Count; i++)
 			    {
-			    	if (Months.Equals(labelStr))
+			    	if (Months[i].Equals(labelStr))
 			    	{
-			    		
+			    		UpdateDayChart(i + 1);
+			    		return;
 			    	}
 			    }
 		    }		
+		}
+		void MainFormLoad(object sender, EventArgs e)
+		{
+			_data.CsvFileName = Directory.GetFiles(Application.StartupPath, "*.csv").FirstOrDefault();
+			if (string.IsNullOrEmpty(_data.CsvFileName))
+		    {
+				MessageBox.Show("CSV-file not found from startup path!");
+				return;
+		    }
+			
+			Text += " - " + Path.GetFileNameWithoutExtension(_data.CsvFileName) + " (Riekonmarjatie 18 A 5)";
+						
+			_progressForm.DoWork += _progressForm_DoWork;
+			_progressForm.Argument = _data;
+			_progressForm.StartPosition = FormStartPosition.CenterScreen;
+			//ReadCsvFile();
+			
+			var result = _progressForm.ShowDialog();
+			if (result == DialogResult.Cancel)
+			{
+			     
+			}
+			else if (result == DialogResult.Abort)
+			{
+			     MessageBox.Show(_progressForm.Result.Error.Message);
+			}
+			else if (result == DialogResult.OK)
+			{
+
+			}
+
+			InitGui();
+								
+			foreach (var year in _data.Years)
+			{
+				var yearLabel = year.ToString();
+				
+				// Total per year			
+				chart1.Series[0].Points.AddXY(yearLabel, _data.YearTotalKwh(year));
+
+				// Total per month	
+				var series = new Series(yearLabel);				
+				series.ChartType = SeriesChartType.Column;						
+				//series.IsValueShownAsLabel = true;
+				chart2.Series.Add(series);
+				
+				for (var i = 1; i <= 12; i++)
+				{
+					series.Points.AddXY(Months[i - 1], _data.MonthlyTotalKwh(year, i));
+				}
+			}		
 		}
 	}
 	
@@ -191,6 +256,7 @@ namespace Elektrik
 	
 	public sealed class RecordCollection
 	{
+		public string CsvFileName;
 		public List<Record> Items;
 		
 		public RecordCollection()

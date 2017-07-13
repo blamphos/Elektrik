@@ -19,9 +19,6 @@ namespace Elektrik
 		private System.Windows.Forms.DataVisualization.Charting.Chart chart3;
 		private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.ComboBox comboBoxMonth;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -58,15 +55,11 @@ namespace Elektrik
 			this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.label2 = new System.Windows.Forms.Label();
-			this.comboBoxMonth = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
-			this.tableLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// chart1
@@ -130,7 +123,6 @@ namespace Elektrik
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 76.75393F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.24607F));
 			this.tableLayoutPanel2.Controls.Add(this.chart3, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 1, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 225);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -156,42 +148,6 @@ namespace Elektrik
 			this.chart3.TabIndex = 0;
 			this.chart3.Text = "chart3";
 			// 
-			// tableLayoutPanel3
-			// 
-			this.tableLayoutPanel3.ColumnCount = 2;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.05556F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.94444F));
-			this.tableLayoutPanel3.Controls.Add(this.label2, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.comboBoxMonth, 1, 0);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(736, 3);
-			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 4;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(216, 211);
-			this.tableLayoutPanel3.TabIndex = 1;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(3, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(87, 23);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Kuukausi";
-			// 
-			// comboBoxMonth
-			// 
-			this.comboBoxMonth.FormattingEnabled = true;
-			this.comboBoxMonth.Location = new System.Drawing.Point(96, 3);
-			this.comboBoxMonth.Name = "comboBoxMonth";
-			this.comboBoxMonth.Size = new System.Drawing.Size(117, 21);
-			this.comboBoxMonth.TabIndex = 3;
-			this.comboBoxMonth.SelectedIndexChanged += new System.EventHandler(this.ComboBoxMonthSelectedIndexChanged);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -200,12 +156,12 @@ namespace Elektrik
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "MainForm";
 			this.Text = "Elektrik";
+			this.Load += new System.EventHandler(this.MainFormLoad);
 			((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
-			this.tableLayoutPanel3.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
