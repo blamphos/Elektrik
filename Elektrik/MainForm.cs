@@ -24,6 +24,7 @@ namespace Elektrik
 	{	
 		readonly List<string> Months = new List<string> { "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu" };		
 
+		int _currentMonth;
 		RecordCollection _data;
 		ProgressForm _progressForm = new ProgressForm();
 			
@@ -149,11 +150,17 @@ namespace Elektrik
 			chart3.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
 			chart3.ChartAreas[0].AxisY.Title = "kWh";
 			chart3.Titles.Add(new Title("Päiväkulutus"));
+			
+			chart4.Series.Clear();
+			chart4.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
+			chart4.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
+			chart4.ChartAreas[0].AxisY.Title = "kWh";
+			chart4.Titles.Add(new Title("Tuntikulutus"));			
 
-			UpdateDayChart(DateTime.Now.Month);
+			UpdateMonthChart(DateTime.Now.Month);
 		}
 		
-		void UpdateDayChart(int month)
+		void UpdateMonthChart(int month)
 		{		
 			chart3.Series.Clear();			
 			chart3.Titles[0].Text = "Päiväkulutus / " + Months[month - 1] + "kuu";
@@ -175,10 +182,41 @@ namespace Elektrik
 				for (var i = 1; i <= dayCount; i++)
 				{
 					series.Points.AddXY(i.ToString(), _data.DailyTotalKwh(year, month, i));
-					//series.Points.AddXY(i.ToString(), _data.DailyAverageKwh(year, month, i));
+				}
+			}	
+
+    		_currentMonth = month;
+			UpdateDayChart(1);
+		}		
+		
+		void UpdateDayChart(int day)
+		{		
+			chart4.Series.Clear();			
+			chart4.Titles[0].Text = "Tuntikulutus / " + day + ". päivä";
+			
+			foreach (var year in _data.Years)
+			{
+				var yearLabel = year.ToString();
+
+				// Total per month	
+				var series = new Series(yearLabel);
+				series.ChartType = SeriesChartType.Column;
+				//series.BorderWidth = 12;
+				//series.IsValueShownAsLabel = true;
+				chart4.Series.Add(series);
+				
+				var hours = _data.GetDayData(year, _currentMonth, day);
+				if (hours.Count == 0)
+				{
+					continue;
+				}
+				
+				for (var i = 1; i <= 24; i++)
+				{
+					series.Points.AddXY(i.ToString("00"), hours[i - 1].KwhTotal);
 				}
 			}				
-		}		
+		}
 		
 		void Chart2MouseDown(object sender, MouseEventArgs e)
 		{
@@ -191,7 +229,7 @@ namespace Elektrik
 			    {
 			    	if (Months[i].Equals(labelStr))
 			    	{
-			    		UpdateDayChart(i + 1);
+			    		UpdateMonthChart(i + 1);
 			    		return;
 			    	}
 			    }
@@ -204,7 +242,8 @@ namespace Elektrik
 		    if (result.ChartElementType == ChartElementType.DataPoint)
 		    {
 			    var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
-			    Debug.WriteLine(labelStr);
+			    var day = Convert.ToInt32(labelStr);
+			    UpdateDayChart(day);
 		    }	
 		}		
 	}

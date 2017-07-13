@@ -19,6 +19,7 @@ namespace Elektrik
 		private System.Windows.Forms.DataVisualization.Charting.Chart chart3;
 		private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.DataVisualization.Charting.Chart chart4;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -50,15 +51,20 @@ namespace Elektrik
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+			System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.chart4 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.chart4)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -120,31 +126,49 @@ namespace Elektrik
 			// 
 			this.tableLayoutPanel2.ColumnCount = 2;
 			this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 76.75393F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.24607F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
+			this.tableLayoutPanel2.Controls.Add(this.chart4, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chart3, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 225);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(955, 217);
 			this.tableLayoutPanel2.TabIndex = 2;
 			// 
-			// chart3
+			// chart4
 			// 
 			chartArea3.Name = "ChartArea1";
-			this.chart3.ChartAreas.Add(chartArea3);
-			this.chart3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chart4.ChartAreas.Add(chartArea3);
+			this.chart4.Dock = System.Windows.Forms.DockStyle.Fill;
 			legend3.Name = "Legend1";
-			this.chart3.Legends.Add(legend3);
-			this.chart3.Location = new System.Drawing.Point(3, 3);
-			this.chart3.Name = "chart3";
+			this.chart4.Legends.Add(legend3);
+			this.chart4.Location = new System.Drawing.Point(528, 3);
+			this.chart4.Name = "chart4";
 			series3.ChartArea = "ChartArea1";
 			series3.Legend = "Legend1";
 			series3.Name = "Series1";
-			this.chart3.Series.Add(series3);
-			this.chart3.Size = new System.Drawing.Size(727, 211);
+			this.chart4.Series.Add(series3);
+			this.chart4.Size = new System.Drawing.Size(424, 211);
+			this.chart4.TabIndex = 1;
+			this.chart4.Text = "chart4";
+			// 
+			// chart3
+			// 
+			chartArea4.Name = "ChartArea1";
+			this.chart3.ChartAreas.Add(chartArea4);
+			this.chart3.Dock = System.Windows.Forms.DockStyle.Fill;
+			legend4.Name = "Legend1";
+			this.chart3.Legends.Add(legend4);
+			this.chart3.Location = new System.Drawing.Point(3, 3);
+			this.chart3.Name = "chart3";
+			series4.ChartArea = "ChartArea1";
+			series4.Legend = "Legend1";
+			series4.Name = "Series1";
+			this.chart3.Series.Add(series4);
+			this.chart3.Size = new System.Drawing.Size(519, 211);
 			this.chart3.TabIndex = 0;
 			this.chart3.Text = "chart3";
 			this.chart3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Chart3MouseDown);
@@ -162,6 +186,7 @@ namespace Elektrik
 			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.chart4)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
 			this.ResumeLayout(false);
 
