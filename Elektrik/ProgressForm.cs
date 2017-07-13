@@ -32,9 +32,6 @@ namespace Elektrik
 		
 		public ProgressForm()
 		{
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
 			InitializeComponent();
 				
 	        DefaultStatusText = "Please wait...";

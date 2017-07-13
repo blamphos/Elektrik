@@ -61,6 +61,8 @@
       <DependentUpon>ProgressForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Record.cs" />
+    <Compile Include="RecordCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

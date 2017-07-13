@@ -147,6 +147,7 @@ namespace Elektrik
 			this.chart3.Size = new System.Drawing.Size(727, 211);
 			this.chart3.TabIndex = 0;
 			this.chart3.Text = "chart3";
+			this.chart3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Chart3MouseDown);
 			// 
 			// MainForm
 			// 
