@@ -92,7 +92,7 @@ namespace Elektrik
 			comboBoxMonth.SelectedIndex = DateTime.Now.Month - 1;
 			comboBoxMonth.SelectedIndexChanged += ComboBoxMonthSelectedIndexChanged;
 
-			UpdateDayChart();
+			UpdateDayChart(DateTime.Now.Month - 1);
 		}
 		
 		void ReadCsvFile()
@@ -126,10 +126,9 @@ namespace Elektrik
 			}
 		}
 
-		void UpdateDayChart()
+		void UpdateDayChart(int month)
 		{		
-			chart3.Series.Clear();
-			var month = comboBoxMonth.SelectedIndex + 1;
+			chart3.Series.Clear();			
 			
 			foreach (var year in _data.Years)
 			{
@@ -155,22 +154,23 @@ namespace Elektrik
 		
 		void ComboBoxMonthSelectedIndexChanged(object sender, EventArgs e)
 		{
-			UpdateDayChart();
+			//UpdateDayChart(Com);
 		}
 		
-		void Chart2MouseClick(object sender, MouseEventArgs e)
-		{
-
-		}
 		void Chart2MouseDown(object sender, MouseEventArgs e)
 		{
 		    var result = chart2.HitTest(e.X, e.Y);		        		  
 		    
 		    if (result.ChartElementType == ChartElementType.DataPoint)
 		    {
-		    	//var selectedColumn = chart2.Series[0].Points[result.PointIndex];
-			    var labelx = result.Series.Points[result.PointIndex].AxisLabel;
-			    Debug.WriteLine(labelx);		    
+			    var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
+			    for (var i = 0; i < Months.Count; i++)
+			    {
+			    	if (Months.Equals(labelStr))
+			    	{
+			    		
+			    	}
+			    }
 		    }		
 		}
 	}

@@ -121,7 +121,6 @@ namespace Elektrik
 			this.chart2.Size = new System.Drawing.Size(629, 216);
 			this.chart2.TabIndex = 1;
 			this.chart2.Text = "chart2";
-			this.chart2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Chart2MouseClick);
 			this.chart2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Chart2MouseDown);
 			// 
 			// tableLayoutPanel2
