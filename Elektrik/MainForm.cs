@@ -244,7 +244,53 @@ namespace Elektrik
 			    var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
 			    var day = Convert.ToInt32(labelStr);
 			    UpdateDayChart(day);
+			    
+			    ShowDaysAndHours();
 		    }	
-		}		
+		    else
+		    {
+		    	ExpandDaysChart();
+		    }
+		}
+		void Chart4MouseDown(object sender, MouseEventArgs e)
+		{
+			ExpandHoursChart();
+		}	
+
+		void ExpandDaysChart()
+		{
+			if (!chart4.Visible)
+			{
+				ShowDaysAndHours();
+			}
+			else
+			{
+				chart3.Visible = true;			    				
+				chart4.Visible = false;			    				
+				tableLayoutPanel2.SetColumnSpan(chart3, 2);
+			}
+		}
+		
+		void ExpandHoursChart()
+		{
+			if (!chart3.Visible)
+			{
+				ShowDaysAndHours();
+			}
+			else
+			{			
+				chart3.Visible = false;			    				
+				chart4.Visible = true;			    				
+				tableLayoutPanel2.SetColumnSpan(chart4, 2);
+			}
+		}	
+
+		void ShowDaysAndHours()
+		{
+			chart3.Visible = true;	
+			chart4.Visible = true;
+			tableLayoutPanel2.SetColumnSpan(chart3, 1);
+			tableLayoutPanel2.SetColumnSpan(chart4, 1);
+		}			
 	}
 }
