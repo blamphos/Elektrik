@@ -68,13 +68,13 @@ namespace Elektrik
 				var yearLabel = year.ToString();
 				
 				// Total per year			
-				chart1.Series[0].Points.AddXY(yearLabel, _data.YearTotalKwh(year));
+				chartYears.Series[0].Points.AddXY(yearLabel, _data.YearTotalKwh(year));
 
 				// Total per month	
 				var series = new Series(yearLabel);				
 				series.ChartType = SeriesChartType.Column;						
 				//series.IsValueShownAsLabel = true;
-				chart2.Series.Add(series);
+				chartMonths.Series.Add(series);
 				
 				for (var i = 1; i <= 12; i++)
 				{
@@ -132,38 +132,38 @@ namespace Elektrik
 		
 		void InitGui()
 		{
-			chart1.Legends.Clear();
-			chart1.ChartAreas[0].AxisY.Title = "kWh";
-			chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
-			chart1.Titles.Add(new Title("Vuosikulutus"));
-			chart1.Series[0].IsValueShownAsLabel = true;
+			chartYears.Legends.Clear();
+			chartYears.ChartAreas[0].AxisY.Title = "kWh";
+			chartYears.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+			chartYears.Titles.Add(new Title("Vuosikulutus"));
+			chartYears.Series[0].IsValueShownAsLabel = true;
 			
-			chart2.Series.Clear();
-			chart2.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
+			chartMonths.Series.Clear();
+			chartMonths.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
 			//chart2.ChartAreas[0].AxisX.LabelStyle.Angle = 45;
-			chart2.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
-			chart2.ChartAreas[0].AxisY.Title = "kWh";
-			chart2.Titles.Add(new Title("Kuukausikulutus"));
+			chartMonths.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
+			chartMonths.ChartAreas[0].AxisY.Title = "kWh";
+			chartMonths.Titles.Add(new Title("Kuukausikulutus"));
 			
-			chart3.Series.Clear();
-			chart3.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
-			chart3.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
-			chart3.ChartAreas[0].AxisY.Title = "kWh";
-			chart3.Titles.Add(new Title("Päiväkulutus"));
+			chartDays.Series.Clear();
+			chartDays.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
+			chartDays.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
+			chartDays.ChartAreas[0].AxisY.Title = "kWh";
+			chartDays.Titles.Add(new Title("Päiväkulutus"));
 			
-			chart4.Series.Clear();
-			chart4.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
-			chart4.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
-			chart4.ChartAreas[0].AxisY.Title = "kWh";
-			chart4.Titles.Add(new Title("Tuntikulutus"));			
+			chartHours.Series.Clear();
+			chartHours.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
+			chartHours.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
+			chartHours.ChartAreas[0].AxisY.Title = "kWh";
+			chartHours.Titles.Add(new Title("Tuntikulutus"));			
 
 			UpdateMonthChart(DateTime.Now.Month);
 		}
 		
 		void UpdateMonthChart(int month)
 		{		
-			chart3.Series.Clear();			
-			chart3.Titles[0].Text = "Päiväkulutus / " + Months[month - 1] + "kuu";
+			chartDays.Series.Clear();			
+			chartDays.Titles[0].Text = "Päiväkulutus / " + GetMonth(month);
 			
 			foreach (var year in _data.Years)
 			{
@@ -177,7 +177,7 @@ namespace Elektrik
 				series.ChartType = SeriesChartType.Column;
 				//series.BorderWidth = 12;
 				//series.IsValueShownAsLabel = true;
-				chart3.Series.Add(series);
+				chartDays.Series.Add(series);
 				
 				for (var i = 1; i <= dayCount; i++)
 				{
@@ -189,10 +189,15 @@ namespace Elektrik
 			UpdateDayChart(1);
 		}		
 		
+		string GetMonth(int month)
+		{
+			return Months[month - 1] + "kuu";
+		}
+		
 		void UpdateDayChart(int day)
 		{		
-			chart4.Series.Clear();			
-			chart4.Titles[0].Text = "Tuntikulutus / " + day + ". päivä";
+			chartHours.Series.Clear();			
+			chartHours.Titles[0].Text = "Tuntikulutus / " + day + ". " + GetMonth(_currentMonth) + "ta";
 			
 			foreach (var year in _data.Years)
 			{
@@ -203,7 +208,7 @@ namespace Elektrik
 				series.ChartType = SeriesChartType.Column;
 				//series.BorderWidth = 12;
 				//series.IsValueShownAsLabel = true;
-				chart4.Series.Add(series);
+				chartHours.Series.Add(series);
 				
 				var hours = _data.GetDayData(year, _currentMonth, day);
 				if (hours.Count == 0)
@@ -220,7 +225,7 @@ namespace Elektrik
 		
 		void Chart2MouseDown(object sender, MouseEventArgs e)
 		{
-		    var result = chart2.HitTest(e.X, e.Y);		        		  
+		    var result = chartMonths.HitTest(e.X, e.Y);		        		  
 		    
 		    if (result.ChartElementType == ChartElementType.DataPoint)
 		    {
@@ -237,7 +242,7 @@ namespace Elektrik
 		}
 		void Chart3MouseDown(object sender, MouseEventArgs e)
 		{
-		    var result = chart3.HitTest(e.X, e.Y);		        		  
+		    var result = chartDays.HitTest(e.X, e.Y);		        		  
 		    
 		    if (result.ChartElementType == ChartElementType.DataPoint)
 		    {
@@ -259,38 +264,38 @@ namespace Elektrik
 
 		void ExpandDaysChart()
 		{
-			if (!chart4.Visible)
+			if (!chartHours.Visible)
 			{
 				ShowDaysAndHours();
 			}
 			else
 			{
-				chart3.Visible = true;			    				
-				chart4.Visible = false;			    				
-				tableLayoutPanel2.SetColumnSpan(chart3, 2);
+				chartDays.Visible = true;			    				
+				chartHours.Visible = false;			    				
+				tableLayoutPanel2.SetColumnSpan(chartDays, 2);
 			}
 		}
 		
 		void ExpandHoursChart()
 		{
-			if (!chart3.Visible)
+			if (!chartDays.Visible)
 			{
 				ShowDaysAndHours();
 			}
 			else
 			{			
-				chart3.Visible = false;			    				
-				chart4.Visible = true;			    				
-				tableLayoutPanel2.SetColumnSpan(chart4, 2);
+				chartDays.Visible = false;			    				
+				chartHours.Visible = true;			    				
+				tableLayoutPanel2.SetColumnSpan(chartHours, 2);
 			}
 		}	
 
 		void ShowDaysAndHours()
 		{
-			chart3.Visible = true;	
-			chart4.Visible = true;
-			tableLayoutPanel2.SetColumnSpan(chart3, 1);
-			tableLayoutPanel2.SetColumnSpan(chart4, 1);
+			chartDays.Visible = true;	
+			chartHours.Visible = true;
+			tableLayoutPanel2.SetColumnSpan(chartDays, 1);
+			tableLayoutPanel2.SetColumnSpan(chartHours, 1);
 		}			
 	}
 }
