@@ -141,18 +141,21 @@ namespace Elektrik
 			//chart2.ChartAreas[0].AxisX.LabelStyle.Angle = 45;
 			chartMonths.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
 			chartMonths.ChartAreas[0].AxisY.Title = "kWh";
+			chartMonths.ChartAreas[0].AxisY.Maximum = 600;
 			chartMonths.Titles.Add(new Title("Kuukausikulutus"));
 			
 			chartDays.Series.Clear();
 			chartDays.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
 			chartDays.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
 			chartDays.ChartAreas[0].AxisY.Title = "kWh";
+			chartDays.ChartAreas[0].AxisY.Maximum = 40;
 			chartDays.Titles.Add(new Title("Päiväkulutus"));
 			
 			chartHours.Series.Clear();
 			chartHours.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
 			chartHours.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
 			chartHours.ChartAreas[0].AxisY.Title = "kWh";
+			chartHours.ChartAreas[0].AxisY.Maximum = 6;
 			chartHours.Titles.Add(new Title("Tuntikulutus"));			
 
 			UpdateDayChart(DateTime.Now.Month);
