@@ -86,6 +86,7 @@ namespace Elektrik
 			this.chartYears.Size = new System.Drawing.Size(320, 216);
 			this.chartYears.TabIndex = 0;
 			this.chartYears.Text = "chart1";
+			this.chartYears.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartYearsMouseDown);
 			// 
 			// tableLayoutPanel1
 			// 
@@ -120,7 +121,7 @@ namespace Elektrik
 			this.chartMonths.Size = new System.Drawing.Size(629, 216);
 			this.chartMonths.TabIndex = 1;
 			this.chartMonths.Text = "chart2";
-			this.chartMonths.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Chart2MouseDown);
+			this.chartMonths.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartMonthsMouseDown);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -154,7 +155,7 @@ namespace Elektrik
 			this.chartHours.Size = new System.Drawing.Size(424, 211);
 			this.chartHours.TabIndex = 1;
 			this.chartHours.Text = "chart4";
-			this.chartHours.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Chart4MouseDown);
+			this.chartHours.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartHoursMouseDown);
 			// 
 			// chartDays
 			// 
@@ -172,7 +173,7 @@ namespace Elektrik
 			this.chartDays.Size = new System.Drawing.Size(519, 211);
 			this.chartDays.TabIndex = 0;
 			this.chartDays.Text = "chart3";
-			this.chartDays.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Chart3MouseDown);
+			this.chartDays.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartDaysMouseDown);
 			// 
 			// MainForm
 			// 

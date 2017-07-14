@@ -21,12 +21,26 @@ namespace Elektrik
 	/// Description of MainForm.
 	/// </summary>
 	public partial class MainForm : Form
-	{	
-		readonly List<string> Months = new List<string> { "Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu" };		
+	{
+		readonly List<string> Months = new List<string> {
+			"Tammi",
+			"Helmi",
+			"Maalis",
+			"Huhti",
+			"Touko",
+			"Kesä",
+			"Heinä",
+			"Elo",
+			"Syys",
+			"Loka",
+			"Marras",
+			"Joulu"
+		};
 
 		int _currentMonth;
 		RecordCollection _data;
 		ProgressForm _progressForm = new ProgressForm();
+		List<int> _years;
 			
 		public MainForm()
 		{
@@ -38,11 +52,10 @@ namespace Elektrik
 			_data = new RecordCollection();				
 			_data.CsvFileName = Directory.GetFiles(Application.StartupPath, "*.csv").FirstOrDefault();
 			
-			if (string.IsNullOrEmpty(_data.CsvFileName))
-		    {
+			if (string.IsNullOrEmpty(_data.CsvFileName)) {
 				MessageBox.Show("CSV-file not found from startup path!");
 				return;
-		    }
+			}
 			
 			Text += " - " + Path.GetFileNameWithoutExtension(_data.CsvFileName);
 						
@@ -61,43 +74,27 @@ namespace Elektrik
 					break;
 			}
 
+			_years = _data.Years;
 			InitGui();
 								
-			foreach (var year in _data.Years)
-			{
-				var yearLabel = year.ToString();
-				
-				// Total per year			
-				chartYears.Series[0].Points.AddXY(yearLabel, _data.YearTotalKwh(year));
-
-				// Total per month	
-				var series = new Series(yearLabel);				
-				series.ChartType = SeriesChartType.Column;						
-				//series.IsValueShownAsLabel = true;
-				chartMonths.Series.Add(series);
-				
-				for (var i = 1; i <= 12; i++)
-				{
-					series.Points.AddXY(Months[i - 1], _data.MonthlyTotalKwh(year, i));
-				}
-			}	
-
+			UpdateYearAndMonthCharts();
+			
 			WindowState = FormWindowState.Maximized;
 		}
 		
 		static void _progressForm_DoWork(ProgressForm sender, DoWorkEventArgs e)
 		{
-		    var myArgument = e.Argument as RecordCollection;
+			var myArgument = e.Argument as RecordCollection;
 		 
 			try 
 			{
 				var lines = File.ReadAllLines(myArgument.CsvFileName);
-								
+				
 				var i = 0;
 				var header = false;
-				foreach(var line in lines)
+				foreach (var line in lines) 
 				{
-					if (!header)
+					if (!header) 
 					{
 						header = true;
 						continue;
@@ -111,24 +108,24 @@ namespace Elektrik
 					myArgument.Items.Add(new Record(dt, kwh, temp));
 					i++;
 					
-			        if (sender.CancellationPending)
-			        {
-			            e.Cancel = true;
-			            return;
-			        }	
+					if (sender.CancellationPending) 
+					{
+						e.Cancel = true;
+						return;
+					}	
 			        
-			        if (i % 1000 == 0)
-			        {
-			        	sender.SetProgress(i, "Step " + i + " / " + lines.Count());
-			        	System.Threading.Thread.Sleep(5);
-			        }						
+					if (i % 1000 == 0) 
+					{
+						sender.SetProgress(i, "Step " + i + " / " + lines.Count());
+						System.Threading.Thread.Sleep(5);
+					}						
 				}
 			} 
 			catch (Exception ex)
 			{
-				MessageBox.Show("ReadCsvFile", ex.Message);
+				MessageBox.Show(ex.Message + " " + ex.InnerException, "ReadCsvFile");
 			}			
-		}		
+		}
 		
 		void InitGui()
 		{
@@ -157,16 +154,40 @@ namespace Elektrik
 			chartHours.ChartAreas[0].AxisY.Title = "kWh";
 			chartHours.Titles.Add(new Title("Tuntikulutus"));			
 
-			UpdateMonthChart(DateTime.Now.Month);
+			UpdateDayChart(DateTime.Now.Month);
 		}
 		
-		void UpdateMonthChart(int month)
+		void UpdateYearAndMonthCharts()
+		{
+			chartMonths.Series.Clear();
+			chartYears.Series[0].Points.Clear();
+			
+			foreach (var year in _years) 
+			{
+				var yearLabel = year.ToString();
+				
+				// Total per year			
+				chartYears.Series[0].Points.AddXY(yearLabel, _data.YearTotalKwh(year));
+
+				// Total per month	
+				var series = new Series(yearLabel);				
+				series.ChartType = SeriesChartType.Column;						
+				//series.IsValueShownAsLabel = true;
+				chartMonths.Series.Add(series);
+				
+				for (var i = 1; i <= 12; i++) 
+				{
+					series.Points.AddXY(Months[i - 1], _data.MonthlyTotalKwh(year, i));
+				}
+			}			
+		}
+		
+		void UpdateDayChart(int month)
 		{		
 			chartDays.Series.Clear();			
 			chartDays.Titles[0].Text = "Päiväkulutus / " + GetMonth(month);
 			
-			foreach (var year in _data.Years)
-			{
+			foreach (var year in _years) {
 				var yearLabel = year.ToString();
 				
 				var monthData = _data.GetMonthData(year, month);
@@ -179,27 +200,26 @@ namespace Elektrik
 				//series.IsValueShownAsLabel = true;
 				chartDays.Series.Add(series);
 				
-				for (var i = 1; i <= dayCount; i++)
-				{
+				for (var i = 1; i <= dayCount; i++) {
 					series.Points.AddXY(i.ToString(), _data.DailyTotalKwh(year, month, i));
 				}
 			}	
 
-    		_currentMonth = month;
-			UpdateDayChart(1);
-		}		
+			_currentMonth = month;
+			UpdateHourChart(1);
+		}
 		
 		string GetMonth(int month)
 		{
 			return Months[month - 1] + "kuu";
 		}
 		
-		void UpdateDayChart(int day)
+		void UpdateHourChart(int day)
 		{		
 			chartHours.Series.Clear();			
 			chartHours.Titles[0].Text = "Tuntikulutus / " + day + ". " + GetMonth(_currentMonth) + "ta";
 			
-			foreach (var year in _data.Years)
+			foreach (var year in _years) 
 			{
 				var yearLabel = year.ToString();
 
@@ -211,64 +231,94 @@ namespace Elektrik
 				chartHours.Series.Add(series);
 				
 				var hours = _data.GetDayData(year, _currentMonth, day);
-				if (hours.Count == 0)
+				if (hours.Count == 0) 
 				{
 					continue;
 				}
 				
-				for (var i = 1; i <= 24; i++)
+				for (var i = 1; i <= hours.Count; i++) 
 				{
 					series.Points.AddXY(i.ToString("00"), hours[i - 1].KwhTotal);
 				}
 			}				
+			chartHours.ChartAreas[0].RecalculateAxesScale();
 		}
 		
-		void Chart2MouseDown(object sender, MouseEventArgs e)
+		void ChartMonthsMouseDown(object sender, MouseEventArgs e)
 		{
-		    var result = chartMonths.HitTest(e.X, e.Y);		        		  
+			var result = chartMonths.HitTest(e.X, e.Y);		        		  
 		    
-		    if (result.ChartElementType == ChartElementType.DataPoint)
-		    {
-			    var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
-			    for (var i = 0; i < Months.Count; i++)
-			    {
-			    	if (Months[i].Equals(labelStr))
-			    	{
-			    		UpdateMonthChart(i + 1);
-			    		return;
-			    	}
-			    }
-		    }		
+			if (result.ChartElementType == ChartElementType.DataPoint) 
+			{
+				var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
+				for (var i = 0; i < Months.Count; i++) 
+				{
+					if (Months[i].Equals(labelStr)) 
+					{
+						UpdateDayChart(i + 1);
+						return;
+					}
+				}
+			}		
 		}
-		void Chart3MouseDown(object sender, MouseEventArgs e)
+		
+		void ChartDaysMouseDown(object sender, MouseEventArgs e)
 		{
-		    var result = chartDays.HitTest(e.X, e.Y);		        		  
+			var result = chartDays.HitTest(e.X, e.Y);		        		  
 		    
-		    if (result.ChartElementType == ChartElementType.DataPoint)
-		    {
-			    var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
-			    var day = Convert.ToInt32(labelStr);
-			    UpdateDayChart(day);
+			if (result.ChartElementType == ChartElementType.DataPoint) 
+			{
+				var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
+				var day = Convert.ToInt32(labelStr);
+				UpdateHourChart(day);
 			    
-			    ShowDaysAndHours();
-		    }	
-		    else
-		    {
-		    	ExpandDaysChart();
-		    }
+				ShowDaysAndHours();
+			} 
+			else
+			{
+				ExpandDaysChart();
+			}
 		}
-		void Chart4MouseDown(object sender, MouseEventArgs e)
+		
+		void ChartHoursMouseDown(object sender, MouseEventArgs e)
 		{
 			ExpandHoursChart();
-		}	
+		}
 
-		void ExpandDaysChart()
+		void ChartYearsMouseDown(object sender, MouseEventArgs e)
 		{
-			if (!chartHours.Visible)
-			{
-				ShowDaysAndHours();
+			var result = chartYears.HitTest(e.X, e.Y);		        		  
+		    
+			if (result.ChartElementType == ChartElementType.DataPoint) 
+			{	
+				var labelStr = result.Series.Points[result.PointIndex].AxisLabel;
+				var year = Convert.ToInt32(labelStr);	
+				_years = new List<int> { year };
+				
+				/*using(var writer = new StreamWriter(year + ".txt", false))
+		      	{
+					foreach(var item in _data.GetYearData(year))
+					{
+						writer.WriteLine(item.Timestamp + ";" + item.KwhTotal);
+					}
+		      	}*/
 			}
 			else
+			{
+				_years = _data.Years;
+			}
+			
+			UpdateYearAndMonthCharts();
+			UpdateDayChart(1);			
+		}
+		
+		void ExpandDaysChart()
+		{
+			if (!chartHours.Visible) 
+			{
+				ShowDaysAndHours();
+			} 
+			else 
 			{
 				chartDays.Visible = true;			    				
 				chartHours.Visible = false;			    				
@@ -278,17 +328,16 @@ namespace Elektrik
 		
 		void ExpandHoursChart()
 		{
-			if (!chartDays.Visible)
+			if (!chartDays.Visible) 
 			{
 				ShowDaysAndHours();
-			}
-			else
-			{			
+			} 
+			else {
 				chartDays.Visible = false;			    				
 				chartHours.Visible = true;			    				
 				tableLayoutPanel2.SetColumnSpan(chartHours, 2);
 			}
-		}	
+		}
 
 		void ShowDaysAndHours()
 		{
@@ -296,6 +345,6 @@ namespace Elektrik
 			chartHours.Visible = true;
 			tableLayoutPanel2.SetColumnSpan(chartDays, 1);
 			tableLayoutPanel2.SetColumnSpan(chartHours, 1);
-		}			
+		}
 	}
 }
