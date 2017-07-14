@@ -129,11 +129,12 @@ namespace Elektrik
 		
 		void InitGui()
 		{
-			chartYears.Legends.Clear();
+			//chartYears.Legends.Clear();
 			chartYears.ChartAreas[0].AxisY.Title = "kWh";
 			chartYears.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
 			chartYears.Titles.Add(new Title("Vuosikulutus"));
-			chartYears.Series[0].IsValueShownAsLabel = true;
+			chartYears.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+			//chartYears.Series[0].IsValueShownAsLabel = true;
 			
 			chartMonths.Series.Clear();
 			chartMonths.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
@@ -160,26 +161,34 @@ namespace Elektrik
 		void UpdateYearAndMonthCharts()
 		{
 			chartMonths.Series.Clear();
-			chartYears.Series[0].Points.Clear();
+			chartYears.Series.Clear();
 			
 			foreach (var year in _years) 
 			{
 				var yearLabel = year.ToString();
 				
-				// Total per year			
-				chartYears.Series[0].Points.AddXY(yearLabel, _data.YearTotalKwh(year));
-
+				// Total per year	
+				var series = new Series(yearLabel);
+				chartYears.Series.Add(series);
+				series.Points.AddXY(yearLabel, _data.YearTotalKwh(year));			
+				series.ToolTip = "Ka. / pvä: " + _data.GetYearDailyAverage(year).ToString("F1") + " kWh";
+				series.IsValueShownAsLabel = true;
+				series.LabelFormat = "####";
+				series["PointWidth"] = "1.5";
+								
 				// Total per month	
-				var series = new Series(yearLabel);				
-				series.ChartType = SeriesChartType.Column;						
+				var monthSeries = new Series(yearLabel);				
+				monthSeries.ChartType = SeriesChartType.Column;						
 				//series.IsValueShownAsLabel = true;
-				chartMonths.Series.Add(series);
+				chartMonths.Series.Add(monthSeries);
 				
 				for (var i = 1; i <= 12; i++) 
 				{
-					series.Points.AddXY(Months[i - 1], _data.MonthlyTotalKwh(year, i));
+					monthSeries.Points.AddXY(Months[i - 1], _data.MonthlyTotalKwh(year, i));
 				}
-			}			
+			}	
+			
+			chartYears.AlignDataPointsByAxisLabel();			
 		}
 		
 		void UpdateDayChart(int month)

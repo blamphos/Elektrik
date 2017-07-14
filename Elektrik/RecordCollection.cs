@@ -43,6 +43,12 @@ namespace Elektrik
 			return Items.Where(x => x.Timestamp.Year == year).ToList();
 		}
 		
+		public double GetYearDailyAverage(int year)
+		{
+			var days = Items.Where(x => x.Timestamp.Year == year).ToList().Count / 24;
+			return YearTotalKwh(year) / days;
+		}
+		
 		public List<Record> GetMonthData(int year, int month)
 		{
 			var yearData = GetYearData(year);	
