@@ -129,12 +129,12 @@ namespace Elektrik
 		
 		void InitGui()
 		{
-			//chartYears.Legends.Clear();
+			chartYears.Legends.Clear();
 			chartYears.ChartAreas[0].AxisY.Title = "kWh";
 			chartYears.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
 			chartYears.Titles.Add(new Title("Vuosikulutus"));
 			chartYears.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
-			//chartYears.Series[0].IsValueShownAsLabel = true;
+			//chartYears.ChartAreas[0].Area3DStyle.Enable3D = true;
 			
 			chartMonths.Series.Clear();
 			chartMonths.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
@@ -149,6 +149,11 @@ namespace Elektrik
 			chartDays.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
 			chartDays.ChartAreas[0].AxisY.Title = "kWh";
 			chartDays.ChartAreas[0].AxisY.Maximum = 40;
+			//chartDays.ChartAreas[0].Area3DStyle.Enable3D = true;
+			//chartDays.ChartAreas[0].Area3DStyle.Perspective = 5;
+			//chartDays.ChartAreas[0].Area3DStyle.Rotation = 65;
+			//chartDays.ChartAreas[0].Area3DStyle.Inclination = 65;
+			//chartDays.ChartAreas[0].Area3DStyle.IsRightAngleAxes = true;
 			chartDays.Titles.Add(new Title("Päiväkulutus"));
 			
 			chartHours.Series.Clear();
@@ -156,6 +161,7 @@ namespace Elektrik
 			chartHours.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
 			chartHours.ChartAreas[0].AxisY.Title = "kWh";
 			chartHours.ChartAreas[0].AxisY.Maximum = 6;
+			//chartHours.ChartAreas[0].Area3DStyle.Enable3D = true;
 			chartHours.Titles.Add(new Title("Tuntikulutus"));			
 
 			UpdateDayChart(DateTime.Now.Month);
@@ -334,7 +340,7 @@ namespace Elektrik
 			{
 				chartDays.Visible = true;			    				
 				chartHours.Visible = false;			    				
-				tableLayoutPanel2.SetColumnSpan(chartDays, 2);
+				tableLayoutPanelLowerSummary.SetColumnSpan(chartDays, 2);
 			}
 		}
 		
@@ -347,7 +353,7 @@ namespace Elektrik
 			else {
 				chartDays.Visible = false;			    				
 				chartHours.Visible = true;			    				
-				tableLayoutPanel2.SetColumnSpan(chartHours, 2);
+				tableLayoutPanelLowerSummary.SetColumnSpan(chartHours, 2);
 			}
 		}
 
@@ -355,8 +361,8 @@ namespace Elektrik
 		{
 			chartDays.Visible = true;	
 			chartHours.Visible = true;
-			tableLayoutPanel2.SetColumnSpan(chartDays, 1);
-			tableLayoutPanel2.SetColumnSpan(chartHours, 1);
+			tableLayoutPanelLowerSummary.SetColumnSpan(chartDays, 1);
+			tableLayoutPanelLowerSummary.SetColumnSpan(chartHours, 1);
 		}
 	}
 }
