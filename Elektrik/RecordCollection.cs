@@ -76,6 +76,11 @@ namespace Elektrik
 			return GetDayData(year, month, day).Sum(x => x.KwhTotal);
 		}
 		
+		public double HourTotalKwh(int year, int month, int day, int hour)
+		{							
+			return GetDayData(year, month, day).Where(x => x.Timestamp.Hour == hour).Sum(x => x.KwhTotal);
+		}		
+		
 		public double DailyAverageKwh(int year, int month, int day)
 		{							
 			return GetDayData(year, month, day).Average(x => x.KwhTotal);

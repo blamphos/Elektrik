@@ -26,6 +26,16 @@ namespace Elektrik
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMainAnalysis;
 		private System.Windows.Forms.DataVisualization.Charting.Chart chartAnalysis;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TextBox textBoxHours;
+		private System.Windows.Forms.TextBox textBoxDays;
+		private System.Windows.Forms.TextBox textBoxMonths;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Button buttonAnalyze;
+		private System.Windows.Forms.TextBox textBoxYears;
+		private System.Windows.Forms.TextBox textBoxResults;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -75,6 +85,16 @@ namespace Elektrik
 			this.tableLayoutPanelMainAnalysis = new System.Windows.Forms.TableLayoutPanel();
 			this.chartAnalysis = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.textBoxHours = new System.Windows.Forms.TextBox();
+			this.textBoxDays = new System.Windows.Forms.TextBox();
+			this.textBoxMonths = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.buttonAnalyze = new System.Windows.Forms.Button();
+			this.textBoxYears = new System.Windows.Forms.TextBox();
+			this.textBoxResults = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.chartYears)).BeginInit();
 			this.tableLayoutPanelMainSummary.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chartMonths)).BeginInit();
@@ -86,6 +106,7 @@ namespace Elektrik
 			this.tabPageAnalysis.SuspendLayout();
 			this.tableLayoutPanelMainAnalysis.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chartAnalysis)).BeginInit();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// chartYears
@@ -235,6 +256,7 @@ namespace Elektrik
 			this.tableLayoutPanelMainAnalysis.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanelMainAnalysis.Controls.Add(this.chartAnalysis, 0, 1);
 			this.tableLayoutPanelMainAnalysis.Controls.Add(this.tableLayoutPanel1, 0, 0);
+			this.tableLayoutPanelMainAnalysis.Controls.Add(this.textBoxResults, 1, 0);
 			this.tableLayoutPanelMainAnalysis.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelMainAnalysis.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelMainAnalysis.Name = "tableLayoutPanelMainAnalysis";
@@ -252,21 +274,30 @@ namespace Elektrik
 			this.chartAnalysis.Dock = System.Windows.Forms.DockStyle.Fill;
 			legend5.Name = "Legend1";
 			this.chartAnalysis.Legends.Add(legend5);
-			this.chartAnalysis.Location = new System.Drawing.Point(3, 157);
+			this.chartAnalysis.Location = new System.Drawing.Point(3, 158);
 			this.chartAnalysis.Name = "chartAnalysis";
 			series5.ChartArea = "ChartArea1";
 			series5.Legend = "Legend1";
 			series5.Name = "Series1";
 			this.chartAnalysis.Series.Add(series5);
-			this.chartAnalysis.Size = new System.Drawing.Size(941, 253);
+			this.chartAnalysis.Size = new System.Drawing.Size(941, 252);
 			this.chartAnalysis.TabIndex = 1;
 			this.chartAnalysis.Text = "chart3";
 			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.41542F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 81.58458F));
+			this.tableLayoutPanel1.Controls.Add(this.textBoxHours, 1, 3);
+			this.tableLayoutPanel1.Controls.Add(this.textBoxDays, 1, 2);
+			this.tableLayoutPanel1.Controls.Add(this.textBoxMonths, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.buttonAnalyze, 1, 4);
+			this.tableLayoutPanel1.Controls.Add(this.textBoxYears, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -277,8 +308,92 @@ namespace Elektrik
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(467, 148);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(467, 149);
 			this.tableLayoutPanel1.TabIndex = 2;
+			// 
+			// textBoxHours
+			// 
+			this.textBoxHours.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxHours.Location = new System.Drawing.Point(89, 93);
+			this.textBoxHours.Name = "textBoxHours";
+			this.textBoxHours.Size = new System.Drawing.Size(375, 20);
+			this.textBoxHours.TabIndex = 8;
+			// 
+			// textBoxDays
+			// 
+			this.textBoxDays.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxDays.Location = new System.Drawing.Point(89, 63);
+			this.textBoxDays.Name = "textBoxDays";
+			this.textBoxDays.Size = new System.Drawing.Size(375, 20);
+			this.textBoxDays.TabIndex = 7;
+			// 
+			// textBoxMonths
+			// 
+			this.textBoxMonths.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxMonths.Location = new System.Drawing.Point(89, 33);
+			this.textBoxMonths.Name = "textBoxMonths";
+			this.textBoxMonths.Size = new System.Drawing.Size(375, 20);
+			this.textBoxMonths.TabIndex = 6;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(3, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(79, 23);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "Years";
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(3, 30);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(79, 23);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Months";
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(3, 60);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(79, 23);
+			this.label3.TabIndex = 2;
+			this.label3.Text = "Days";
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(3, 90);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(79, 23);
+			this.label4.TabIndex = 3;
+			this.label4.Text = "Hours";
+			// 
+			// buttonAnalyze
+			// 
+			this.buttonAnalyze.Location = new System.Drawing.Point(89, 123);
+			this.buttonAnalyze.Name = "buttonAnalyze";
+			this.buttonAnalyze.Size = new System.Drawing.Size(75, 23);
+			this.buttonAnalyze.TabIndex = 4;
+			this.buttonAnalyze.Text = "Analyze";
+			this.buttonAnalyze.UseVisualStyleBackColor = true;
+			this.buttonAnalyze.Click += new System.EventHandler(this.ButtonAnalyzeClick);
+			// 
+			// textBoxYears
+			// 
+			this.textBoxYears.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxYears.Location = new System.Drawing.Point(89, 3);
+			this.textBoxYears.Name = "textBoxYears";
+			this.textBoxYears.Size = new System.Drawing.Size(375, 20);
+			this.textBoxYears.TabIndex = 5;
+			// 
+			// textBoxResults
+			// 
+			this.textBoxResults.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxResults.Location = new System.Drawing.Point(476, 3);
+			this.textBoxResults.Multiline = true;
+			this.textBoxResults.Name = "textBoxResults";
+			this.textBoxResults.ReadOnly = true;
+			this.textBoxResults.Size = new System.Drawing.Size(468, 149);
+			this.textBoxResults.TabIndex = 3;
 			// 
 			// MainForm
 			// 
@@ -299,7 +414,10 @@ namespace Elektrik
 			this.tabPageSummary.ResumeLayout(false);
 			this.tabPageAnalysis.ResumeLayout(false);
 			this.tableLayoutPanelMainAnalysis.ResumeLayout(false);
+			this.tableLayoutPanelMainAnalysis.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chartAnalysis)).EndInit();
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}

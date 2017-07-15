@@ -164,6 +164,25 @@ namespace Elektrik
 			//chartHours.ChartAreas[0].Area3DStyle.Enable3D = true;
 			chartHours.Titles.Add(new Title("Tuntikulutus"));			
 
+			// Analysis tab
+			textBoxYears.Text = _years.First().ToString(); //string.Join(",", _years);
+			textBoxMonths.Text = "1"; //string.Join(",", Enumerable.Range(1, 12).ToList());
+			textBoxDays.Text = string.Join(",", Enumerable.Range(1, 31).ToList());
+			textBoxHours.Text = string.Join(",", Enumerable.Range(0, 24).ToList());
+			
+			chartAnalysis.Series.Clear();
+			chartAnalysis.ChartAreas[0].AxisX.LabelStyle.Interval = 1;
+			chartAnalysis.ChartAreas[0].AxisX.LabelAutoFitStyle = LabelAutoFitStyles.LabelsAngleStep45;
+			chartAnalysis.ChartAreas[0].AxisY.Title = "kWh";
+			chartAnalysis.ChartAreas[0].AxisX.LabelStyle.Enabled = false;			
+			//chartAnalysis.ChartAreas[0].AxisY.Maximum = 40;
+			chartAnalysis.ChartAreas[0].Area3DStyle.Enable3D = true;
+			//chartAnalysis.ChartAreas[0].Area3DStyle.Perspective = 5;
+			chartAnalysis.ChartAreas[0].Area3DStyle.Rotation = 65;
+			chartAnalysis.ChartAreas[0].Area3DStyle.Inclination = 65;
+			chartAnalysis.ChartAreas[0].Area3DStyle.IsRightAngleAxes = true;
+			//chartAnalysis.Titles.Add(new Title("Analyysi"));
+			
 			UpdateDayChart(DateTime.Now.Month);
 		}
 		
@@ -241,7 +260,6 @@ namespace Elektrik
 			{
 				var yearLabel = year.ToString();
 
-				// Total per month	
 				var series = new Series(yearLabel);
 				series.ChartType = SeriesChartType.Column;
 				//series.BorderWidth = 12;
@@ -363,6 +381,74 @@ namespace Elektrik
 			chartHours.Visible = true;
 			tableLayoutPanelLowerSummary.SetColumnSpan(chartDays, 1);
 			tableLayoutPanelLowerSummary.SetColumnSpan(chartHours, 1);
+		}
+		
+		void ButtonAnalyzeClick(object sender, EventArgs e)
+		{
+			chartAnalysis.Series.Clear();
+			
+			var years = textBoxYears.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+			var months = textBoxMonths.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+			var days = textBoxDays.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+			var hours = textBoxHours.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+
+			foreach (var hour in hours)
+			{
+				var hourLabel = hour.ToString("00");
+				var series = new Series(hourLabel);
+				series.ChartType = SeriesChartType.Column;	
+				series.ToolTip = hourLabel;
+				chartAnalysis.Series.Add(series);	
+				
+				foreach (var year in years)
+				{
+					foreach(var month in months)
+					{
+						foreach(var day in days)
+						{
+							var hourData = _data.HourTotalKwh(year, month, day, hour);
+							
+							series.Points.AddXY(hour.ToString("00"), hourData);
+						}	
+					}					
+				}				
+			}				
+		}
+		
+		void test()
+		{
+			var years = textBoxYears.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+			var months = textBoxMonths.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+			var days = textBoxDays.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+			var hours = textBoxHours.Text.Split(',').ToList().Select(x => Convert.ToInt32(x)).ToList();
+			
+			foreach (var year in years) 
+			{
+				var yearLabel = year.ToString();
+
+				var series = new Series(yearLabel);
+				series.ChartType = SeriesChartType.Column;
+				//series.BorderWidth = 12;
+				//series.IsValueShownAsLabel = true;
+				
+				foreach(var month in months)
+				{
+					foreach(var day in days)
+					{
+						var hoursData = _data.GetDayData(year, month, day);
+						if (hoursData.Count == 0) 
+						{
+							continue;
+						}
+						
+						for (var i = 1; i <= hoursData.Count; i++) 
+						{
+							series.Points.AddXY(i.ToString("00"), hoursData[i - 1].KwhTotal);
+						}						
+					}	
+				}
+				chartAnalysis.Series.Add(series);				
+			}				
 		}
 	}
 }
